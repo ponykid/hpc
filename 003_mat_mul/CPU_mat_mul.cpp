@@ -4,12 +4,11 @@ Author: Tushar Gautam
 Date: 16th Jan 2022
 */
 
-#include <cuda.h>
 #include <iostream>
 
 using namespace std;
 
-// FUnctions
+// Functions
 void print(float **mat, int N);
 /*
 Function to print Array
