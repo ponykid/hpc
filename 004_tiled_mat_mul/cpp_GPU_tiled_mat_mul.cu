@@ -60,9 +60,12 @@ int main() {
     cudaDeviceProp devProp;
     for (int i = 0; i < numDev; i++){
         cudaGetDeviceProperties(&devProp, i);
-        std::cout << "Device Name: " << devProp.name << "\n";
+        std::cout << "\nDevice Name: " << devProp.name << "\n";
+        std::cout << "Number of Streaming processors in device: " << devProp.multiProcessorCount << "\n";
         std::cout << "Max Threads per block: " << devProp.maxThreadsPerBlock << "\n";
         std::cout << "Shared Memory per block: " << devProp.sharedMemPerBlock/1000.0 << " KB \n";
+
+        
     }
 
     int n, m, k;
