@@ -1,7 +1,7 @@
 /*
-Description: Tiled MatMul
+Description: Tiled MatMul for arbitrary sized matrices
 Author: Tushar Gautam
-Date: 25 Jan 2022
+Date: 29 Jan 2022
 */
 
 #include <cuda.h>
@@ -176,8 +176,15 @@ __global__ void matMulKernel(double *A, double *B, double *C, int n, int k, int 
 
     for (int t = 0; t < k; t+=TILE_SIZE) {
         // Loading elements into shared memory
-        ds_A[threadIdx.y][threadIdx.x] = A[rowIdx*k+t+threadIdx.x];
-        ds_B[threadIdx.y][threadIdx.x] = B[(t+threadIdx.y)*m+colIdx];
+        if (rowIdx < n && (t+threadIdx.x) < k)
+            ds_A[threadIdx.y][threadIdx.x] = A[rowIdx*k+t+threadIdx.x];
+        else
+            ds_A[threadIdx.y][threadIdx.x] = 0.0;
+
+        if ((t+threadIdx.y) < k && colIdx < m)
+            ds_B[threadIdx.y][threadIdx.x] = B[(t+threadIdx.y)*m+colIdx];
+        else
+            ds_B[threadIdx.y][threadIdx.x] = 0.0;
         __syncthreads();
 
         // Performing computations
